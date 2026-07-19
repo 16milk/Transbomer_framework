@@ -15,14 +15,18 @@ import minitensor as mt
 
 
 class Reranker(mt.Module):
-    """Tiny MLP that learns to score retrieval and lexical-overlap features."""
+    """Tiny Transformer reranker over retrieval and lexical-overlap features."""
 
     def __init__(self) -> None:
         super().__init__()
-        self.network = mt.Sequential(mt.Linear(2, 8), mt.ReLU(), mt.Linear(8, 1))
+        self.projection = mt.Linear(2, 4)
+        self.block = mt.TransformerBlock(4, 2, feed_forward_dim=8, dropout=0.0)
+        self.classifier = mt.Linear(4, 1)
 
     def forward(self, features: mt.Tensor) -> mt.Tensor:
-        return self.network(features)
+        sequence = self.projection(features).reshape(features.shape[0], 1, 4)
+        encoded = self.block(sequence).mean(axis=1)
+        return self.classifier(encoded)
 
 
 def lexical_overlap(query: str, text: str) -> float:

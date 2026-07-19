@@ -28,7 +28,7 @@ Attention 和基础 Transformer Block 外，还支持：
 - `state_dict` 保存/加载与模型结构元数据
 - shape/dtype 兼容性校验、随机种子控制和参数量统计
 - 静态图节点统计、耗时基准工具和 NumPy 对照脚本
-- 本地 Markdown 分块、确定性向量检索和 MiniTensor MLP 重排的 RAG 示例
+- 本地 Markdown 分块、确定性向量检索和 MiniTensor Transformer 重排的 RAG 示例
 
 ## 静态图示例
 
@@ -69,4 +69,5 @@ python examples/rag_demo.py
 - [阶段 5 总结](docs/stage-5-summary.md)
 - [阶段 6 总结](docs/stage-6-summary.md)
 - [阶段 7 总结](docs/stage-7-summary.md)
+- [阶段 1～7 完成度审计](docs/stage-1-7-audit.md)
 - [开发约定](CONTRIBUTING.md)

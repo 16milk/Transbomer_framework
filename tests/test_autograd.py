@@ -79,6 +79,30 @@ class AutogradTest(unittest.TestCase):
         expected += np.array([[0.0, 1.0, 0.0], [1.0, 0.0, 0.0]])
         np.testing.assert_allclose(x.grad.data, expected)
 
+    def test_reduction_and_shape_gradients_match_finite_difference(self) -> None:
+        values = np.array([[0.4, 1.2], [1.7, 2.3]], dtype=np.float64)
+        operations = [
+            (
+                lambda value: value.sum(axis=0).mean(),
+                lambda candidate: candidate.sum(axis=0).mean(),
+            ),
+            (
+                lambda value: value.mean(axis=1).sum(),
+                lambda candidate: candidate.mean(axis=1).sum(),
+            ),
+            (
+                lambda value: value.reshape(4).transpose().sum(),
+                lambda candidate: candidate.reshape(4).transpose().sum(),
+            ),
+        ]
+        for eager, reference in operations:
+            candidate = mt.tensor(values, requires_grad=True)
+            eager(candidate).backward()
+            expected = np.array(
+                [finite_difference(reference, values, index) for index in np.ndindex(values.shape)]
+            ).reshape(values.shape)
+            np.testing.assert_allclose(candidate.grad.data, expected, rtol=1e-5, atol=1e-7)
+
     def test_indexing_gradient_accumulates_repeated_indices(self) -> None:
         x = mt.tensor([1.0, 2.0, 3.0], requires_grad=True)
         x[[0, 0, 2]].sum().backward()

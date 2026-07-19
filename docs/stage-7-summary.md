@@ -6,7 +6,7 @@
 - `load_markdown` 读取本地 Markdown，按稳定路径顺序生成 `DocumentChunk`。
 - `HashingEncoder` 使用确定性的 BLAKE2 hashing 生成归一化文本向量。
 - `cosine_similarity` 和 `retrieve` 使用 MiniTensor Tensor 运算完成内存检索。
-- `examples/rag_demo.py` 使用小型 MiniTensor MLP 学习相似度和词法重叠特征，
+- `examples/rag_demo.py` 使用小型 MiniTensor Transformer 学习相似度和词法重叠特征，
   对检索候选进行重排。
 - 示例数据位于 `examples/data/rag_docs/`，不依赖网络、向量数据库或外部模型。
 
@@ -25,4 +25,4 @@ python examples/rag_demo.py
 
 - hashing encoder 是教学用的确定性词袋表示，不替代生产级语义编码器。
 - 检索数据保存在内存中，不实现向量数据库和持久化索引。
-- MLP 重排器只使用两个手工特征，不实现大模型生成或外部供应商封装。
+- Transformer 重排器只使用两个手工特征，不实现大模型生成或外部供应商封装。
