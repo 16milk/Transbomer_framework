@@ -4,6 +4,8 @@ MiniTensor 是一个参考 TensorFlow 核心思想、从零实现的教学型深
 项目计划逐步支持 Tensor、自动微分、神经网络训练、静态计算图和基础图优化，
 并使用小型 Transformer 与 RAG 链路作为综合示例。
 
+当前发布版本：`0.2.0`
+
 ## 快速开始
 
 项目要求 Python 3.11+：
@@ -14,6 +16,12 @@ source .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e ".[dev]"
 pytest
+```
+
+从 GitHub release tag 安装：
+
+```bash
+python -m pip install "minitensor @ git+https://github.com/16milk/Transbomer_framework.git@v0.2.0"
 ```
 
 当前仓库已完成阶段 7：RAG 综合示例。除 NumPy CPU 后端的动态计算图、
@@ -70,4 +78,5 @@ python examples/rag_demo.py
 - [阶段 6 总结](docs/stage-6-summary.md)
 - [阶段 7 总结](docs/stage-7-summary.md)
 - [阶段 1～7 完成度审计](docs/stage-1-7-audit.md)
+- [更新日志](CHANGELOG.md)
 - [开发约定](CONTRIBUTING.md)

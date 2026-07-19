@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "minitensor"
-version = "0.1.0"
+version = "0.2.0"
 description = "A small educational deep learning framework inspired by TensorFlow."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = "MIT"
 authors = [{ name = "MiniTensor contributors" }]
 dependencies = [
     "numpy>=1.26",
@@ -33,4 +33,3 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
-

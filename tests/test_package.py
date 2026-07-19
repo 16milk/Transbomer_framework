@@ -5,7 +5,7 @@ import minitensor
 
 class PackageTest(unittest.TestCase):
     def test_package_imports(self) -> None:
-        self.assertEqual(minitensor.__version__, "0.1.0")
+        self.assertEqual(minitensor.__version__, "0.2.0")
         self.assertEqual(
             minitensor.__all__,
             [
