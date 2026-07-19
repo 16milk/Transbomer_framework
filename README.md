@@ -16,8 +16,8 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-当前仓库已完成阶段 2：自动微分。支持 NumPy CPU 后端的动态计算图、反向传播、
-梯度累积、广播梯度和基础算子梯度。
+当前仓库已完成阶段 3：神经网络训练闭环。支持 NumPy CPU 后端的动态计算图、
+反向传播、参数化模块、MLP 层、常用损失函数和 SGD/Momentum/Adam 优化器。
 
 ## 文档
 
@@ -27,4 +27,5 @@ pytest
 - [阶段 0 总结](docs/stage-0-summary.md)
 - [阶段 1 总结](docs/stage-1-summary.md)
 - [阶段 2 总结](docs/stage-2-summary.md)
+- [阶段 3 总结](docs/stage-3-summary.md)
 - [开发约定](CONTRIBUTING.md)
