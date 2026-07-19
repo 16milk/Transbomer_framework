@@ -132,7 +132,7 @@ class Tensor:
         target_shape = _normalize_shape_arguments(shape)
         try:
             return Tensor._from_array(self._data.reshape(target_shape))
-        except ValueError as error:
+        except (TypeError, ValueError) as error:
             raise ShapeError(
                 f"Cannot reshape Tensor with shape {self.shape} to {target_shape}."
             ) from error
@@ -142,7 +142,7 @@ class Tensor:
         normalized_axes = _normalize_axes_arguments(axes)
         try:
             return Tensor._from_array(self._data.transpose(normalized_axes))
-        except ValueError as error:
+        except (TypeError, ValueError) as error:
             raise ShapeError(
                 f"Cannot transpose Tensor with shape {self.shape} using axes {normalized_axes}."
             ) from error
@@ -158,6 +158,26 @@ class Tensor:
     def max(self, axis: Axis = None, keepdims: bool = False) -> "Tensor":
         """Compute the maximum value along ``axis``."""
         return self._reduce(np.max, "max", axis=axis, keepdims=keepdims)
+
+    def add(self, other: ArrayLike) -> "Tensor":
+        """Add ``other`` elementwise."""
+        return self._binary_operation(other, np.add, "add")
+
+    def sub(self, other: ArrayLike) -> "Tensor":
+        """Subtract ``other`` elementwise."""
+        return self._binary_operation(other, np.subtract, "sub")
+
+    def mul(self, other: ArrayLike) -> "Tensor":
+        """Multiply ``other`` elementwise."""
+        return self._binary_operation(other, np.multiply, "mul")
+
+    def div(self, other: ArrayLike) -> "Tensor":
+        """Divide by ``other`` elementwise."""
+        return self._binary_operation(other, np.divide, "div")
+
+    def pow(self, other: ArrayLike) -> "Tensor":
+        """Raise elements to ``other`` elementwise."""
+        return self._binary_operation(other, np.power, "pow")
 
     def matmul(self, other: ArrayLike) -> "Tensor":
         """Multiply this Tensor by ``other`` using NumPy matmul semantics."""
@@ -188,7 +208,7 @@ class Tensor:
         """Return a Tensor selected with NumPy indexing semantics."""
         try:
             result = self._data[index]
-        except (IndexError, TypeError) as error:
+        except (IndexError, TypeError, ValueError) as error:
             raise ShapeError(
                 f"Invalid index {index!r} for Tensor with shape {self.shape}."
             ) from error
@@ -201,31 +221,31 @@ class Tensor:
         return f"Tensor({self._data!r})"
 
     def __add__(self, other: ArrayLike) -> "Tensor":
-        return self._binary_operation(other, np.add, "add")
+        return self.add(other)
 
     def __radd__(self, other: ArrayLike) -> "Tensor":
         return _to_tensor(other)._binary_operation(self, np.add, "add")
 
     def __sub__(self, other: ArrayLike) -> "Tensor":
-        return self._binary_operation(other, np.subtract, "sub")
+        return self.sub(other)
 
     def __rsub__(self, other: ArrayLike) -> "Tensor":
         return _to_tensor(other)._binary_operation(self, np.subtract, "sub")
 
     def __mul__(self, other: ArrayLike) -> "Tensor":
-        return self._binary_operation(other, np.multiply, "mul")
+        return self.mul(other)
 
     def __rmul__(self, other: ArrayLike) -> "Tensor":
         return _to_tensor(other)._binary_operation(self, np.multiply, "mul")
 
     def __truediv__(self, other: ArrayLike) -> "Tensor":
-        return self._binary_operation(other, np.divide, "div")
+        return self.div(other)
 
     def __rtruediv__(self, other: ArrayLike) -> "Tensor":
         return _to_tensor(other)._binary_operation(self, np.divide, "div")
 
     def __pow__(self, other: ArrayLike) -> "Tensor":
-        return self._binary_operation(other, np.power, "pow")
+        return self.pow(other)
 
     def __rpow__(self, other: ArrayLike) -> "Tensor":
         return _to_tensor(other)._binary_operation(self, np.power, "pow")
@@ -277,7 +297,7 @@ class Tensor:
     ) -> "Tensor":
         try:
             return Tensor._from_array(operation(self._data, axis=axis, keepdims=keepdims))
-        except (TypeError, np.AxisError, ValueError) as error:
+        except (TypeError, IndexError, ValueError) as error:
             raise ShapeError(
                 f"Cannot {name} Tensor with shape {self.shape} along axis {axis!r}."
             ) from error
@@ -286,8 +306,8 @@ class Tensor:
 def _normalize_shape_arguments(
     arguments: tuple[Union[int, tuple[int, ...]], ...],
 ) -> Union[int, tuple[int, ...]]:
-    if len(arguments) == 1 and isinstance(arguments[0], tuple):
-        return arguments[0]
+    if len(arguments) == 1 and isinstance(arguments[0], (tuple, list)):
+        return tuple(arguments[0])
     return arguments  # type: ignore[return-value]
 
 
@@ -296,8 +316,8 @@ def _normalize_axes_arguments(
 ) -> Union[None, tuple[int, ...]]:
     if not arguments:
         return None
-    if len(arguments) == 1 and isinstance(arguments[0], tuple):
-        return arguments[0]
+    if len(arguments) == 1 and isinstance(arguments[0], (tuple, list)):
+        return tuple(arguments[0])
     return arguments  # type: ignore[return-value]
 
 
@@ -325,6 +345,31 @@ def ones(shape: Union[int, tuple[int, ...]], dtype: Any = np.float32) -> Tensor:
 def exp(value: ArrayLike) -> Tensor:
     """Apply the exponential function elementwise."""
     return _to_tensor(value).exp()
+
+
+def add(left: ArrayLike, right: ArrayLike) -> Tensor:
+    """Add two inputs elementwise."""
+    return _to_tensor(left).add(right)
+
+
+def sub(left: ArrayLike, right: ArrayLike) -> Tensor:
+    """Subtract ``right`` from ``left`` elementwise."""
+    return _to_tensor(left).sub(right)
+
+
+def mul(left: ArrayLike, right: ArrayLike) -> Tensor:
+    """Multiply two inputs elementwise."""
+    return _to_tensor(left).mul(right)
+
+
+def div(left: ArrayLike, right: ArrayLike) -> Tensor:
+    """Divide ``left`` by ``right`` elementwise."""
+    return _to_tensor(left).div(right)
+
+
+def pow(left: ArrayLike, right: ArrayLike) -> Tensor:
+    """Raise ``left`` to ``right`` elementwise."""
+    return _to_tensor(left).pow(right)
 
 
 def log(value: ArrayLike) -> Tensor:

@@ -52,12 +52,16 @@ class TensorShapeAndIndexingTest(unittest.TestCase):
         tensor = mt.Tensor(np.arange(12).reshape(3, 4))
         sliced = tensor[:, 1:]
         reshaped = tensor.reshape(4, 3)
+        reshaped_from_list = tensor.reshape([4, 3])
         transposed = tensor.transpose(1, 0)
+        transposed_from_list = tensor.transpose([1, 0])
 
         np.testing.assert_array_equal(sliced.data, np.arange(12).reshape(3, 4)[:, 1:])
         self.assertTrue(np.shares_memory(tensor.data, sliced.data))
         self.assertTrue(np.shares_memory(tensor.data, reshaped.data))
+        np.testing.assert_array_equal(reshaped_from_list.data, np.arange(12).reshape(4, 3))
         self.assertTrue(np.shares_memory(tensor.data, transposed.data))
+        np.testing.assert_array_equal(transposed_from_list.data, np.arange(12).reshape(3, 4).T)
         self.assertEqual(tensor[1, 2].item(), 6)
         self.assertEqual(tensor.T.shape, (4, 3))
 
@@ -94,6 +98,11 @@ class TensorOperatorsTest(unittest.TestCase):
         np.testing.assert_allclose((tensor**2).data, values**2)
         np.testing.assert_allclose((2**tensor).data, 2**values)
         np.testing.assert_allclose((-tensor).data, -values)
+        np.testing.assert_allclose(mt.add(values, offsets).data, values + offsets)
+        np.testing.assert_allclose(tensor.sub(offsets).data, values - offsets)
+        np.testing.assert_allclose(mt.mul(values, offsets).data, values * offsets)
+        np.testing.assert_allclose(mt.div(values, 2).data, values / 2)
+        np.testing.assert_allclose(mt.pow(values, 2).data, values**2)
 
     def test_incompatible_broadcast_raises_shape_error(self) -> None:
         with self.assertRaises(mt.ShapeError):
