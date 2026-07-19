@@ -26,6 +26,15 @@ from .nn import (
     softmax,
 )
 from .optim import SGD, Adam, Momentum
+from .rag import (  # noqa: F401
+    DocumentChunk,
+    HashingEncoder,
+    RetrievalResult,
+    cosine_similarity,
+    load_markdown,
+    retrieve,
+    split_text,
+)
 from .serialization import load_state_dict, model_structure, save_state_dict  # noqa: F401
 from .tensor import (
     Tensor,
