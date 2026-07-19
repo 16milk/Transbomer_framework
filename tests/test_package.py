@@ -22,6 +22,7 @@ class PackageTest(unittest.TestCase):
                 "max",
                 "mean",
                 "mul",
+                "no_grad",
                 "ones",
                 "pow",
                 "relu",

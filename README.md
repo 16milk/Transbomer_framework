@@ -16,8 +16,8 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-当前仓库已完成阶段 1：Tensor 与基础算子。支持 NumPy CPU 后端的即时前向计算，
-自动微分将从阶段 2 开始实现。
+当前仓库已完成阶段 2：自动微分。支持 NumPy CPU 后端的动态计算图、反向传播、
+梯度累积、广播梯度和基础算子梯度。
 
 ## 文档
 
@@ -26,4 +26,5 @@ pytest
 - [背景知识概要](docs/background-knowledge.md)
 - [阶段 0 总结](docs/stage-0-summary.md)
 - [阶段 1 总结](docs/stage-1-summary.md)
+- [阶段 2 总结](docs/stage-2-summary.md)
 - [开发约定](CONTRIBUTING.md)

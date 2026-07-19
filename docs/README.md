@@ -11,6 +11,7 @@ MiniTensor 是一个从零实现的教学型深度学习计算框架。项目以
 - [背景知识概要](./background-knowledge.md)：实现计算框架需要掌握的数学、自动微分、计算图和 Transformer 基础。
 - [阶段 0 总结](./stage-0-summary.md)：工程初始化的交付与验收结果。
 - [阶段 1 总结](./stage-1-summary.md)：Tensor 数据模型和基础前向算子的交付与边界。
+- [阶段 2 总结](./stage-2-summary.md)：动态计算图、反向传播和基础算子梯度的交付与边界。
 
 ## 推荐阅读顺序
 

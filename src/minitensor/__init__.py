@@ -1,5 +1,6 @@
 """Public package entry point for MiniTensor."""
 
+from .autograd import no_grad
 from .errors import DTypeError, MiniTensorError, ShapeError
 from .tensor import (
     Tensor,
@@ -37,6 +38,7 @@ __all__ = [
     "max",
     "mean",
     "mul",
+    "no_grad",
     "ones",
     "pow",
     "relu",
