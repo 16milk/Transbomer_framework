@@ -16,7 +16,7 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-当前仓库已完成阶段 6：序列化与开发工具。除 NumPy CPU 后端的动态计算图、
+当前仓库已完成阶段 7：RAG 综合示例。除 NumPy CPU 后端的动态计算图、
 参数化模块、稳定 Softmax/交叉熵、Embedding、LayerNorm、Dropout、Multi-Head
 Attention 和基础 Transformer Block 外，还支持：
 
@@ -68,4 +68,5 @@ python examples/rag_demo.py
 - [阶段 4 总结](docs/stage-4-summary.md)
 - [阶段 5 总结](docs/stage-5-summary.md)
 - [阶段 6 总结](docs/stage-6-summary.md)
+- [阶段 7 总结](docs/stage-7-summary.md)
 - [开发约定](CONTRIBUTING.md)
