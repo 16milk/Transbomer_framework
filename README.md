@@ -16,9 +16,32 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-当前仓库已完成阶段 4：模型组件完善。支持 NumPy CPU 后端的动态计算图、
+当前仓库已完成阶段 5：静态图与图优化。除 NumPy CPU 后端的动态计算图、
 参数化模块、稳定 Softmax/交叉熵、Embedding、LayerNorm、Dropout、Multi-Head
-Attention 和基础 Transformer Block。
+Attention 和基础 Transformer Block 外，还支持：
+
+- 基于示例输入的静态图追踪 `trace(...)`
+- 图 IR：`Graph`、`Node`、`Value`
+- shape/dtype 推理、拓扑排序和静态图执行
+- 常量折叠、死代码消除和公共子表达式消除
+- 文本化图结构输出，便于调试
+
+## 静态图示例
+
+```python
+import numpy as np
+import minitensor as mt
+
+model = mt.Sequential(mt.Linear(2, 3), mt.ReLU(), mt.Linear(3, 1))
+inputs = np.ones((4, 2), dtype=np.float32)
+
+graph = mt.trace(model, inputs)
+graph.optimize()
+outputs = graph.run(inputs)
+
+print(outputs)
+print(graph)
+```
 
 ## 文档
 
@@ -30,4 +53,5 @@ Attention 和基础 Transformer Block。
 - [阶段 2 总结](docs/stage-2-summary.md)
 - [阶段 3 总结](docs/stage-3-summary.md)
 - [阶段 4 总结](docs/stage-4-summary.md)
+- [阶段 5 总结](docs/stage-5-summary.md)
 - [开发约定](CONTRIBUTING.md)
