@@ -11,3 +11,7 @@ class DTypeError(MiniTensorError):
 
 class ShapeError(MiniTensorError):
     """Raised when Tensor shapes are incompatible for an operation."""
+
+
+class StateDictError(MiniTensorError):
+    """Raised when serialized model parameters are incompatible."""

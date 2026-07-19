@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from collections import OrderedDict
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
+from pathlib import Path
 from typing import Any
 
 import numpy as np
 
+from .errors import StateDictError
 from .tensor import Tensor, tensor
 
 
@@ -94,6 +96,59 @@ class Module:
     def zero_grad(self) -> None:
         for parameter in self.parameters():
             parameter.zero_grad()
+
+    def state_dict(self) -> OrderedDict[str, Tensor]:
+        """Return detached copies of all registered parameters."""
+        return OrderedDict(
+            (name, Tensor(parameter.data.copy(), dtype=parameter.dtype))
+            for name, parameter in self.named_parameters()
+        )
+
+    def load_state_dict(
+        self,
+        state_dict: Mapping[str, Tensor | np.ndarray | Any],
+        *,
+        strict: bool = True,
+    ) -> None:
+        """Load parameters after validating names, shapes, and dtypes."""
+        expected = OrderedDict(self.named_parameters())
+        received = set(state_dict)
+        missing = [name for name in expected if name not in received]
+        unexpected = [name for name in received if name not in expected]
+        if strict and (missing or unexpected):
+            details = []
+            if missing:
+                details.append(f"missing keys: {missing}")
+            if unexpected:
+                details.append(f"unexpected keys: {unexpected}")
+            raise StateDictError("Incompatible state_dict (" + "; ".join(details) + ").")
+
+        for name, parameter in expected.items():
+            if name not in state_dict:
+                continue
+            value = state_dict[name]
+            array = value.data if isinstance(value, Tensor) else np.asarray(value)
+            if array.shape != parameter.shape:
+                raise StateDictError(
+                    f"Parameter {name!r} has shape {array.shape}, expected {parameter.shape}."
+                )
+            if np.dtype(array.dtype) != parameter.dtype:
+                raise StateDictError(
+                    f"Parameter {name!r} has dtype {array.dtype}, expected {parameter.dtype}."
+                )
+            parameter.data[...] = array
+
+    def save_state_dict(self, path: str | Path) -> None:
+        """Save parameters and model structure metadata to a compressed NPZ file."""
+        from .serialization import save_state_dict
+
+        save_state_dict(self, path)
+
+    def load_state_dict_file(self, path: str | Path, *, strict: bool = True) -> None:
+        """Load parameters from a file created by :meth:`save_state_dict`."""
+        from .serialization import load_state_dict
+
+        load_state_dict(self, path, strict=strict)
 
 
 class Linear(Module):

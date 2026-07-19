@@ -16,7 +16,7 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-当前仓库已完成阶段 5：静态图与图优化。除 NumPy CPU 后端的动态计算图、
+当前仓库已完成阶段 6：序列化与开发工具。除 NumPy CPU 后端的动态计算图、
 参数化模块、稳定 Softmax/交叉熵、Embedding、LayerNorm、Dropout、Multi-Head
 Attention 和基础 Transformer Block 外，还支持：
 
@@ -25,6 +25,9 @@ Attention 和基础 Transformer Block 外，还支持：
 - shape/dtype 推理、拓扑排序和静态图执行
 - 常量折叠、死代码消除和公共子表达式消除
 - 文本化图结构输出，便于调试
+- `state_dict` 保存/加载与模型结构元数据
+- shape/dtype 兼容性校验、随机种子控制和参数量统计
+- 静态图节点统计、耗时基准工具和 NumPy 对照脚本
 
 ## 静态图示例
 
@@ -54,4 +57,5 @@ print(graph)
 - [阶段 3 总结](docs/stage-3-summary.md)
 - [阶段 4 总结](docs/stage-4-summary.md)
 - [阶段 5 总结](docs/stage-5-summary.md)
+- [阶段 6 总结](docs/stage-6-summary.md)
 - [开发约定](CONTRIBUTING.md)

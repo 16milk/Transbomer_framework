@@ -1,7 +1,7 @@
 """Public package entry point for MiniTensor."""
 
 from .autograd import no_grad
-from .errors import DTypeError, MiniTensorError, ShapeError
+from .errors import DTypeError, MiniTensorError, ShapeError, StateDictError  # noqa: F401
 from .graph import Graph, Node, Value, trace  # noqa: F401
 from .nn import (
     CrossEntropyLoss,
@@ -26,6 +26,7 @@ from .nn import (
     softmax,
 )
 from .optim import SGD, Adam, Momentum
+from .serialization import load_state_dict, model_structure, save_state_dict  # noqa: F401
 from .tensor import (
     Tensor,
     add,
@@ -44,6 +45,14 @@ from .tensor import (
     sum,
     tensor,
     zeros,
+)
+from .tools import (  # noqa: F401
+    BenchmarkResult,
+    benchmark,
+    count_parameters,
+    graph_stats,
+    module_summary,
+    set_seed,
 )
 
 __version__ = "0.1.0"
