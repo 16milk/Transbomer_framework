@@ -16,8 +16,9 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
-当前仓库已完成阶段 3：神经网络训练闭环。支持 NumPy CPU 后端的动态计算图、
-反向传播、参数化模块、MLP 层、常用损失函数和 SGD/Momentum/Adam 优化器。
+当前仓库已完成阶段 4：模型组件完善。支持 NumPy CPU 后端的动态计算图、
+参数化模块、稳定 Softmax/交叉熵、Embedding、LayerNorm、Dropout、Multi-Head
+Attention 和基础 Transformer Block。
 
 ## 文档
 
@@ -28,4 +29,5 @@ pytest
 - [阶段 1 总结](docs/stage-1-summary.md)
 - [阶段 2 总结](docs/stage-2-summary.md)
 - [阶段 3 总结](docs/stage-3-summary.md)
+- [阶段 4 总结](docs/stage-4-summary.md)
 - [开发约定](CONTRIBUTING.md)
