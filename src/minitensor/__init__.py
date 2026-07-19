@@ -2,6 +2,7 @@
 
 from .autograd import no_grad
 from .errors import DTypeError, MiniTensorError, ShapeError
+from .graph import Graph, Node, Value, trace  # noqa: F401
 from .nn import (
     CrossEntropyLoss,
     Dropout,
